@@ -138,45 +138,31 @@ while (1):
         
     break
 
-flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
-len(flags)
-258
-flags[40]
-'COLOR_BGR2RGB'
+# flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
+# len(flags)
+# 258
+# flags[40]
+# 'COLOR_BGR2RGB'
 
-sample = cv2.imread('./hasilsample/ini.jpg')
-plt.imshow(sample)
-plt.show()
+# sample = cv2.imread('./hasilsample/ini.jpg')
+# plt.imshow(sample)
+# plt.show()
 
-sample = cv2.cvtColor(sample, cv2.COLOR_BGR2RGB)
-plt.imshow(sample)
-plt.show()
+image_path = cv2.imread('./hasilsample/ini.jpg')
 
-r, g, b = cv2.split(sample)
-fig = plt.figure()
-axis = fig.add_subplot(1, 1, 1, projection="3d")
+fig = pyplot.figure()
+axis = fig.add_subplot(1, 1, 1, projection="3d") # 3D plot with scalar values in each axis
 
-pixel_colors = sample.reshape((np.shape(sample)[0]*np.shape(sample)[1], 3))
-norm = colors.Normalize(vmin=-1.,vmax=1.)
-norm.autoscale(pixel_colors)
-pixel_colors = norm(pixel_colors).tolist()
+im = Image.open(image_path)
+r, g, b = list(im.getdata(0)), list(im.getdata(1)), list(im.getdata(2))
 
-axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
+axis.scatter(r, g, b, c="#ff0000", marker="o")
 axis.set_xlabel("Red")
 axis.set_ylabel("Green")
 axis.set_zlabel("Blue")
-plt.show()
+pyplot.show()
 
-hsv_sample = cv2.cvtColor(sample, cv2.COLOR_RGB2HSV)
-h, s, v = cv2.split(hsv_sample)
-fig = plt.figure()
-axis = fig.add_subplot(1, 1, 1, projection="3d")
 
-axis.scatter(h.flatten(), s.flatten(), v.flatten(), facecolors=pixel_colors, marker=".")
-axis.set_xlabel("Hue")
-axis.set_ylabel("Saturation")
-axis.set_zlabel("Value")
-plt.show()
 
 mypath = '/home/pi/punyarayy/hasilsample/test/'
 onlyfile = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]

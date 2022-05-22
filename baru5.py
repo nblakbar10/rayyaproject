@@ -17,6 +17,10 @@ import matplotlib.animation as animation
 import threading as thread
 import os
 
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import pyplot
+from PIL import Image
+
 #Parameters
 x_len = 100        # Number of points to display
 y_range = [10, 80]  # Range of possible Y values to display
@@ -149,80 +153,23 @@ while (1):
     'COLOR_BGR2RGB'
 
 #########
-    sample = cv2.imread('./hasilsample/ini.jpg')
-    plt.imshow(sample)
-    plt.show()
+    # sample = cv2.imread('./hasilsample/ini.jpg')
+    # plt.imshow(sample)
+    # plt.show()
 ##########
-    flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
-    len(flags)
-    258
-    flags[40]
-    'COLOR_BGR2RGB'
+    image_path = cv2.imread('./hasilsample/ini.jpg')
 
-    sample = cv2.imread('./hasilsample/ini.jpg')
-    plt.imshow(sample)
-    plt.show()
+    fig = pyplot.figure()
+    axis = fig.add_subplot(1, 1, 1, projection="3d") # 3D plot with scalar values in each axis
 
-    sample = cv2.cvtColor(sample, cv2.COLOR_BGR2RGB)
-    plt.imshow(sample)
-    plt.show()
+    im = Image.open(image_path)
+    r, g, b = list(im.getdata(0)), list(im.getdata(1)), list(im.getdata(2))
 
-    r, g, b = cv2.split(sample)
-    fig = plt.figure()
-    axis = fig.add_subplot(1, 1, 1, projection="3d")
-
-    pixel_colors = sample.reshape((np.shape(sample)[0]*np.shape(sample)[1], 3))
-    norm = colors.Normalize(vmin=-1.,vmax=1.)
-    norm.autoscale(pixel_colors)
-    pixel_colors = norm(pixel_colors).tolist()
-
-    axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
+    axis.scatter(r, g, b, c="#ff0000", marker="o")
     axis.set_xlabel("Red")
     axis.set_ylabel("Green")
     axis.set_zlabel("Blue")
-    plt.show()
-
-    hsv_sample = cv2.cvtColor(sample, cv2.COLOR_RGB2HSV)
-    h, s, v = cv2.split(hsv_sample)
-    fig = plt.figure()
-    axis = fig.add_subplot(1, 1, 1, projection="3d")
-
-    axis.scatter(h.flatten(), s.flatten(), v.flatten(), facecolors=pixel_colors, marker=".")
-    axis.set_xlabel("Hue")
-    axis.set_ylabel("Saturation")
-    axis.set_zlabel("Value")
-    plt.show()
-
-
-    sample = cv2.cvtColor(sample, cv2.COLOR_BGR2RGB)
-    plt.imshow(sample)
-    plt.show()
-
-    r, g, b = cv2.split(sample)
-    fig = plt.figure()
-    axis = fig.add_subplot(1, 1, 1, projection="3d")
-
-    pixel_colors = sample.reshape((np.shape(sample)[0]*np.shape(sample)[1], 3))
-    norm = colors.Normalize(vmin=-1.,vmax=1.)
-    norm.autoscale(pixel_colors)
-    pixel_colors = norm(pixel_colors).tolist()
-
-    axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
-    axis.set_xlabel("Red")
-    axis.set_ylabel("Green")
-    axis.set_zlabel("Blue")
-    plt.show()
-
-    hsv_sample = cv2.cvtColor(sample, cv2.COLOR_RGB2HSV)
-    h, s, v = cv2.split(hsv_sample)
-    fig = plt.figure()
-    axis = fig.add_subplot(1, 1, 1, projection="3d")
-
-    axis.scatter(h.flatten(), s.flatten(), v.flatten(), facecolors=pixel_colors, marker=".")
-    axis.set_xlabel("Hue")
-    axis.set_ylabel("Saturation")
-    axis.set_zlabel("Value")
-    plt.show()
+    pyplot.show()
 ################
 
 mypath = '/home/pi/Desktop/punyarayy/hasilsample/'
