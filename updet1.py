@@ -74,7 +74,7 @@ fan.start(100)
 
 camera = picamera.PiCamera()
 res = 1280
-camera.resolution = (1296, 972)
+camera.resolution = (res, res)
 camera.framerate = 64
 rawCapture = PiRGBArray(camera, size = (res,res))
 state = 0
@@ -84,58 +84,6 @@ interval =2
 i=0
 waktuS=0
 take=0
-
-while (1):
-    def get_image(image_path):
-        image = cv2.imread(image_path)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        return image
-    def get_colors (image, number_of_colors):
-        modified_image = cv2.resize(image, (600, 400), interpolation = cv2.INTER_AREA)
-        modified_image = modified_image.reshape(modified_image.shape[0]*modified_image.shape[1], 3)
-        
-    def get_colors (image, number_of_colors):
-        modified_image = cv2.resize(image, (600, 400), interpolation =cv2.INTER_AREA)
-        modified_image = modified_image.reshape(modified_image.shape[0]*modified_image. shape[1], 3)
-    
-        clf = KMeans(n_clusters = number_of_colors)
-        labels = clf.fit_predict(modified_image)
-
-        counts = Counter(labels)
-
-        center_colors = clf.cluster_centers_
-        # We get ordered colors by iterating through the keys
-        ordered_colors = [center_colors[i] for i in counts.keys()]
-        rgb_colors = [ordered_colors[i] for i in counts.keys()]
-        arr_rgb = np.asarray(rgb_colors)
-        return rgb_colors
-
-    if state ==1 :
-        GPIO.output(23, True)
-        print("hai")
-        time.sleep(0.01)
-    for frame in camera.capture_continuous(rawCapture, format = "rgb", use_video_port= True):
-        time = time.time()
-        image = frame.array
-        rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        cv2.imshow("Frame", rgb)
-
-    if (waktu-waktuS >= interval) and take==0 :
-        camera.capture('/home/pi/punyarayy/hasilsample/image_tes%s.jpg' %i)
-    i=i+1
-    waktuS=waktu
-
-    if i>2 :
-        take=1
-        i=0
-        print("done")
-        key = cv2.waitKey(1)&0xFF
-    rawCapture.truncate(0)
-
-    if take==1 :
-        take=0
-        
-    break
 
 flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
 len(flags)
@@ -176,6 +124,61 @@ axis.set_xlabel("Hue")
 axis.set_ylabel("Saturation")
 axis.set_zlabel("Value")
 plt.show()
+
+while (1):
+    def get_image(image_path):
+        image = cv2.imread(image_path)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        return image
+    def get_colors (image, number_of_colors):
+        modified_image = cv2.resize(image, (600, 400), interpolation = cv2.INTER_AREA)
+        modified_image = modified_image.reshape(modified_image.shape[0]*modified_image.shape[1], 3)
+        
+    def get_colors (image, number_of_colors):
+        modified_image = cv2.resize(image, (600, 400), interpolation =cv2.INTER_AREA)
+        modified_image = modified_image.reshape(modified_image.shape[0]*modified_image. shape[1], 3)
+    
+        clf = KMeans(n_clusters = number_of_colors)
+        labels = clf.fit_predict(modified_image)
+
+        counts = Counter(labels)
+
+        center_colors = clf.cluster_centers_
+        # We get ordered colors by iterating through the keys
+        ordered_colors = [center_colors[i] for i in counts.keys()]
+        rgb_colors = [ordered_colors[i] for i in counts.keys()]
+        arr_rgb = np.asarray(rgb_colors)
+        return rgb_colors
+
+    if state ==1 :
+        GPIO.output(23, True)
+        print("hai")
+        time.sleep(0.01)
+    for frame in camera.capture_continuous(rawCapture, format = "rgb", use_video_port= True):
+        waktu = time.time()
+        image = frame.array
+        rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        cv2.imshow("Frame", rgb)
+        rawCapture.truncate(0)
+
+    if (waktu-waktuS >= interval) and take==0 :
+        camera.capture('/home/pi/punyarayy/hasilsample/image_tes%s.jpg' %i)
+    i=i+1
+    waktuS=waktu
+
+    if i>2 :
+        take=1
+        i=0
+        print("done")
+        key = cv2.waitKey(1)&0xFF
+    rawCapture.truncate(0)
+
+    if take==1 :
+        take=0
+        
+    break
+
+
 
 mypath = '/home/pi/punyarayy/hasilsample/test/'
 onlyfile = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
