@@ -74,7 +74,7 @@ fan.start(100)
 
 camera = picamera.PiCamera()
 res = 1280
-camera.resolution = (res, res)
+camera.resolution = (1296, 972)
 camera.framerate = 64
 rawCapture = PiRGBArray(camera, size = (res,res))
 state = 0
