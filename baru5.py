@@ -149,7 +149,7 @@ while (1):
     'COLOR_BGR2RGB'
 
 #########
-    sample = cv2.imread('./hasil_sample/ini.jpg')
+    sample = cv2.imread('./hasilsample/ini.jpg')
     plt.imshow(sample)
     plt.show()
 ##########
